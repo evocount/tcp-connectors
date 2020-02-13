@@ -11,8 +11,8 @@ Library to handle any TCP based connection.
 
 ## Currently available connectors
 
-1. `TCPConnector` - This will handle peristent TCP connections
-2. `GMQTTConnector` - This will handle MQTT connections
+1. `TCPConnector` - This will handle peristent TCP connections.
+2. `GMQTTConnector` - This will handle MQTT connections.
 3. `ServerConnector` - Creates a HTTP server that can handle requests and send responses.
 
 ## License
