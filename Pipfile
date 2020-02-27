@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 autopep8 = "*"
+pdoc3 = "*"
 
 [packages]
 aiohttp = {extras = ["speedups"],version = "*"}

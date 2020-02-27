@@ -1,11 +1,3 @@
-"""
-Copyright (C) EvoCount GmbH - All Rights Reserved
-
-Unauthorized copying of this file, via any medium is strictly prohibited
-Proprietary and confidential.
-"""
-
-
 import asyncio
 import logging
 import uuid
