@@ -16,19 +16,28 @@ class GMQTTConnector(BaseConnector):
     running over MQTT.
     """
 
-    def __init__(self, host, port, topic, ack_topic, **kwargs):
+    def __init__(self, host, port, subscribe_topic, publish_topic, **kwargs):
         self.host = host
         self.port = port
-        self.topic = topic
-        self.ack_topic = ack_topic
+
+        # topics
+        self.subscribe_topic = subscribe_topic
+        self.publish_topic = publish_topic
+
+        # connection
         self.connection_id = uuid.uuid4().hex[:8]
         self.is_connected = False
         self.client = MQTTClient(self.connection_id)
+
+        # callbacks
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
         self.client.on_subscribe = self.on_subscribe
         self.STOP = asyncio.Event()
+
+        # options
+        self.ack_topic = kwargs.get('ack_topic')
         self.enable_auth = kwargs.get('enable_auth', False)
         self.username = kwargs.get('username')
         self.password = kwargs.get('password')
@@ -41,7 +50,9 @@ class GMQTTConnector(BaseConnector):
             connection_id=self.connection_id,
             host=self.host,
             port=self.port,
-            is_connected=self.is_connected
+            is_connected=self.is_connected,
+            subscribe_topic=self.subscribe_topic,
+            publish_topic=self.publish_topic
         )
 
     def on_connect(self, *args):
@@ -58,7 +69,7 @@ class GMQTTConnector(BaseConnector):
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
         # client.subscribe("$SYS/#", qos=0)
-        self.client.subscribe(self.topic, qos=2)
+        self.client.subscribe(self.subscribe_topic, qos=2)
 
     async def on_message(self, *args):
         """on_message callback gets executed when the connection receives
