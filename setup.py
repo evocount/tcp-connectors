@@ -24,6 +24,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/evocount/connectors',
+    download_url='https://github.com/evocount/connectors/archive/v0.1.0.tar.gz',
     author='EvoCount GmbH',
     author_email='abhishek.mv1995@gmail.com',
     license='Unlicensed',
