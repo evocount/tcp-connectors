@@ -18,16 +18,16 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='connectors',
+    name='tcp-connectors',
     version='0.1.0',
-    description='Connectors for connecting to any TCP service',
+    description='Connectors for connecting to any TCP-based service',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/evocount/connectors',
-    download_url='https://github.com/evocount/connectors/archive/v0.1.0.tar.gz',
+    download_url='https://github.com/evocount/connectors/archive/v0.1.1.tar.gz',
     author='EvoCount GmbH',
     author_email='abhishek.mv1995@gmail.com',
-    license='Unlicensed',
+    license='MIT',
     packages=find_packages(),
     install_requires=[
         "gmqtt",
@@ -41,7 +41,7 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
 
-        'License :: MIT License',
+        'License :: OSI Approved :: MIT License',
 
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
