@@ -43,8 +43,8 @@ class ServerConnector(BaseConnector):
             await self.site.start()
         except OSError as e:
             raise DestinationNotAvailable(
-                'Connection Failed: Error connecting to'
-                ' %s:%s - %s' % self.host % self.port % e
+                f'Connection Failed: Error connecting to'
+                f' {self.host}:{self.port} - {e}'
             ) from None
 
     async def echo(self, _):

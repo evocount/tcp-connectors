@@ -84,8 +84,8 @@ class TCPConnector(BaseConnector):
             return self.reader, self.writer
         except ConnectionError as e:
             raise DestinationNotAvailable(
-                'Connection Failed: Error connecting to'
-                ' %s:%s - %s' % self.host % self.port % e
+                f'Connection Failed: Error connecting to'
+                f' {self.host}:{self.port} - {e}'
             ) from None
         except Exception as e:
             raise ConnectionFailed(e)
