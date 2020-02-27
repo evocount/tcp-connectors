@@ -24,7 +24,7 @@ class GMQTTConnector(BaseConnector):
     running over MQTT.
     """
 
-    def __init__(self, host, port, topic, ack_topic):
+    def __init__(self, host, port, topic, ack_topic, **kwargs):
         self.host = host
         self.port = port
         self.topic = topic
@@ -37,6 +37,9 @@ class GMQTTConnector(BaseConnector):
         self.client.on_disconnect = self.on_disconnect
         self.client.on_subscribe = self.on_subscribe
         self.STOP = asyncio.Event()
+        self.enable_auth = kwargs.get('enable_auth', False)
+        self.username = kwargs.get('username')
+        self.password = kwargs.get('password')
 
     def get_connection_details(self):
         """get_connection_details returns the details
@@ -80,7 +83,7 @@ class GMQTTConnector(BaseConnector):
         return 0
 
     @staticmethod
-    def on_disconnect():
+    def on_disconnect(*args):
         """on_disconnect is a callback that gets executed
          after a disconnection occurs"""
         logger.info('Disconnected')
@@ -105,6 +108,8 @@ class GMQTTConnector(BaseConnector):
             ConnectionFailed: If connection failed due to any other reason
         """
         try:
+            if self.enable_auth:
+                self.client.set_auth_credentials(self.username, self.password)
             await self.client.connect(f"{self.host}")
             self.is_connected = True
         except ConnectionRefusedError as e:
