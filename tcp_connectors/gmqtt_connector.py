@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import uuid
+import ssl
 
 from gmqtt import Client as MQTTClient
 
@@ -38,9 +39,12 @@ class GMQTTConnector(BaseConnector):
 
         # options
         self.ack_topic = kwargs.get('ack_topic')
+        self.enable_ssl = kwargs.get('enable_ssl', False)
         self.enable_auth = kwargs.get('enable_auth', False)
         self.username = kwargs.get('username')
         self.password = kwargs.get('password')
+        self.client_cert = kwargs.get('client_cert')
+        self.client_keyfile = kwargs.get('client_keyfile')
 
     def get_connection_details(self):
         """get_connection_details returns the details
@@ -111,9 +115,18 @@ class GMQTTConnector(BaseConnector):
             ConnectionFailed: If connection failed due to any other reason
         """
         try:
+            conn_kwargs = dict(host=self.host, port=self.port)
             if self.enable_auth:
                 self.client.set_auth_credentials(self.username, self.password)
-            await self.client.connect(f"{self.host}")
+            if self.enable_ssl:
+                assert self.client_cert and self.client_keyfile, \
+                    "Cannot enable ssl without specifying client_cert and client_keyfile"
+                ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+                ssl_context.load_cert_chain(self.client_cert,
+                                            keyfile=self.client_keyfile)
+                conn_kwargs.update(dict(ssl=ssl_context))
+
+            await self.client.connect(**conn_kwargs)
             self.is_connected = True
         except ConnectionRefusedError as e:
             # raising from None suppresses the exception chain
