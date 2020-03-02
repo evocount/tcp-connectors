@@ -242,7 +242,7 @@
         "tcp-connectors": {
             "editable": true,
             "git": "https://github.com/evocount/tcp-connectors.git",
-            "ref": "8d66f5f3de7bf0ec778af7baca04211accbbce52"
+            "ref": "4a0b6b178a98d832a223fb8a04f2cee1bdbffdef"
         },
         "yarl": {
             "hashes": [
