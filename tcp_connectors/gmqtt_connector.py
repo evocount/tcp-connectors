@@ -44,7 +44,7 @@ class GMQTTConnector(BaseConnector):
         self.username = kwargs.get('username')
         self.password = kwargs.get('password')
         self.client_cert = kwargs.get('client_cert')
-        self.client_keyfile = kwargs.get('client_keyfile')
+        self.client_key = kwargs.get('client_key')
 
     def get_connection_details(self):
         """get_connection_details returns the details
@@ -119,11 +119,11 @@ class GMQTTConnector(BaseConnector):
             if self.enable_auth:
                 self.client.set_auth_credentials(self.username, self.password)
             if self.enable_ssl:
-                assert self.client_cert and self.client_keyfile, \
-                    "Cannot enable ssl without specifying client_cert and client_keyfile"
+                assert self.client_cert and self.client_key, \
+                    "Cannot enable ssl without specifying client_cert and client_key"
                 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
                 ssl_context.load_cert_chain(self.client_cert,
-                                            keyfile=self.client_keyfile)
+                                            keyfile=self.client_key)
                 conn_kwargs.update(dict(ssl=ssl_context))
 
             await self.client.connect(**conn_kwargs)

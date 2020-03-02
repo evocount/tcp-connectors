@@ -10,6 +10,7 @@ pdoc3 = "*"
 [packages]
 aiohttp = {extras = ["speedups"],version = "*"}
 gmqtt = "*"
+tcp-connectors = {editable = true,git = "https://github.com/evocount/tcp-connectors.git"}
 
 [requires]
 python_version = "3.8"
