@@ -45,6 +45,7 @@ class GMQTTConnector(BaseConnector):
         self.password = kwargs.get('password')
         self.client_cert = kwargs.get('client_cert')
         self.client_key = kwargs.get('client_key')
+        self.qos = kwargs.get('qos', 2)
 
     def get_connection_details(self):
         """get_connection_details returns the details
@@ -73,7 +74,14 @@ class GMQTTConnector(BaseConnector):
         # Subscribing in on_connect() means that if we lose the connection and
         # reconnect then subscriptions will be renewed.
         # client.subscribe("$SYS/#", qos=0)
-        self.client.subscribe(self.subscribe_topic, qos=2)
+        if isinstance(self.subscribe_topic, str):
+            self.client.subscribe(self.subscribe_topic, qos=self.qos)
+        elif isinstance(self.subscribe_topic, list):
+            for topic in self.subscribe_topic:
+                self.client.subscribe(topic, qos=self.qos)
+        else:
+            logger.warning('subscribe_topic is either None or an unknown data type.'
+                           ' Currently subscribed to 0 topics.')
 
     async def on_message(self, *args):
         """on_message callback gets executed when the connection receives
